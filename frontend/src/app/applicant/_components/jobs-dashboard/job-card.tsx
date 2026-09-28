@@ -11,13 +11,14 @@ import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 import type { Job } from "@/services/jobs/job.schema";
 import {
   formatDate,
   formatEmploymentType,
   formatStatus,
   isDeadlinePassed,
-} from "./jobs-dashboard.utils";
+} from "@/lib/format-job";
 
 interface JobCardProps {
   job: Job;
@@ -109,7 +110,13 @@ export function JobCard({ job }: JobCardProps) {
       </CardContent>
 
       <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
-        <Button variant="contained" disabled={closed || expired} fullWidth>
+        <Button
+          variant="contained"
+          disabled={closed || expired}
+          fullWidth
+          component={Link}
+          href={`/applicant/jobs/${job.id}`}
+        >
           View &amp; apply
         </Button>
       </CardActions>

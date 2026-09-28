@@ -43,7 +43,9 @@ export function LoginForm() {
       const user = await loginWithEmail(values.email, values.password);
       const idToken = await user.getIdToken();
       const sessionUser = await createSession(idToken);
-      enqueueSnackbar(`Welcome back, ${sessionUser.name}`, { variant: "success" });
+      enqueueSnackbar(`Welcome back, ${sessionUser.name}`, {
+        variant: "success",
+      });
       router.replace("/");
       router.refresh();
     } catch (error) {

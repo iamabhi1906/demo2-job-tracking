@@ -16,3 +16,15 @@ export interface BackendErrorBody {
   statusCode?: number;
   error?: string;
 }
+
+/** Turns any axios failure into the backend's own message where there is one. */
+export function toErrorMessage(error: unknown, fallback: string): Error {
+  if (axios.isAxiosError<BackendErrorBody>(error)) {
+    const body = error.response?.data;
+    const message = Array.isArray(body?.message)
+      ? body.message.join(", ")
+      : body?.message;
+    return new Error(message ?? fallback);
+  }
+  return error instanceof Error ? error : new Error(fallback);
+}

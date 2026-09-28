@@ -1,11 +1,11 @@
-import { api, type BackendErrorBody } from "@/lib/http";
-import axios from "axios";
+import { api, toErrorMessage } from "@/lib/http";
 import { type GetJobsDto, getJobsResponseSchema } from "./job.schema";
 
 export type { GetJobsDto, Job, GetJobsResponse } from "./job.schema";
 
 export default async function getJobs(dto: GetJobsDto = {}) {
   try {
+    // Drop empty values: `?department=` would fail the backend's `.min(1)`.
     const params = Object.fromEntries(
       Object.entries(dto).filter(
         ([, value]) =>
@@ -18,13 +18,6 @@ export default async function getJobs(dto: GetJobsDto = {}) {
     const response = await api.get("/jobs", { params });
     return getJobsResponseSchema.parse(response.data);
   } catch (error) {
-    if (axios.isAxiosError<BackendErrorBody>(error)) {
-      const body = error.response?.data ?? null;
-      const message = Array.isArray(body?.message)
-        ? body.message.join(", ")
-        : body?.message;
-      throw new Error(message ?? "Failed to get jobs.");
-    }
-    throw error;
+    throw toErrorMessage(error, "Failed to get jobs.");
   }
 }

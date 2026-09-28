@@ -8,6 +8,8 @@ import { FirebaseModule } from "./infrastructure/firebase/firebase.module.js";
 import { JobsModule } from "./jobs/jobs.module.js";
 import { UsersModule } from "./users/users.module.js";
 import { TagsModule } from "./tags/tags.module.js";
+import { ApplicantsModule } from "./applicants/applicants.module.js";
+import { ApplicationsModule } from "./applications/applications.module.js";
 
 @Module({
 	imports: [
@@ -18,6 +20,8 @@ import { TagsModule } from "./tags/tags.module.js";
 		UsersModule,
 		JobsModule,
 		TagsModule,
+		ApplicantsModule,
+		ApplicationsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

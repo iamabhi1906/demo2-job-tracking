@@ -11,7 +11,6 @@ export interface JobFilters {
   department: string;
   location: string;
   employmentType: string;
-  status: string;
   tags: string[];
 }
 
@@ -20,7 +19,6 @@ export const emptyFilters: JobFilters = {
   department: "",
   location: "",
   employmentType: "",
-  status: "",
   tags: [],
 };
 
@@ -47,7 +45,6 @@ function readSearch(params: URLSearchParams): JobSearch {
       department: params.get("department") ?? "",
       location: params.get("location") ?? "",
       employmentType: params.get("employmentType") ?? "",
-      status: params.get("status") ?? "",
       tags: params.get("tags")?.split(",").filter(Boolean) ?? [],
     },
     page: Math.max(0, Number(params.get("page")) || 0),

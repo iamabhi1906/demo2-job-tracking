@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import { TagSelect } from "@/components/tags/tag-select/tag-select";
-import { EMPLOYMENT_TYPES, STATUSES } from "./jobs-dashboard.utils";
+import { EMPLOYMENT_TYPES } from "@/lib/format-job";
 import { emptyFilters, type JobFilters, useJobSearch } from "./use-job-search";
 
 type FilterField = {
@@ -28,7 +28,6 @@ const FIELDS: FilterField[] = [
     label: "Employment type",
     options: EMPLOYMENT_TYPES,
   },
-  { key: "status", label: "Status", options: STATUSES },
   { key: "department", label: "Department" },
   { key: "location", label: "Location" },
 ];

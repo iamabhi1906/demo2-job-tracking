@@ -1,0 +1,46 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import { SignOutButton } from "@/components/sign-out-button";
+
+const LINKS = [
+  { href: "/applicant", label: "Browse jobs" },
+  { href: "/applicant/profile", label: "My profile" },
+] as const;
+
+export function ApplicantNav() {
+  const pathname = usePathname();
+
+  return (
+    <Stack
+      component="nav"
+      direction="row"
+      spacing={1}
+      sx={{
+        alignItems: "center",
+        px: 3,
+        py: 1.5,
+        borderBottom: 1,
+        borderColor: "divider",
+      }}
+    >
+      {LINKS.map((link) => (
+        <Button
+          key={link.href}
+          component={Link}
+          href={link.href}
+          // The job list lives at /applicant, so only an exact hit means "current".
+          variant={pathname === link.href ? "contained" : "text"}
+          size="small"
+        >
+          {link.label}
+        </Button>
+      ))}
+      <Stack sx={{ flexGrow: 1 }} />
+      <SignOutButton />
+    </Stack>
+  );
+}

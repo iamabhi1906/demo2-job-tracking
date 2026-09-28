@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Browse jobs",
 };
 
-export default function ApplicantDashboard({}) {
+export default function ApplicantDashboard() {
   return (
     <Box sx={{ mx: "auto", px: 3, py: 4 }}>
       <Typography

@@ -7,19 +7,24 @@ import { CreateJobController } from "./features/create-job/create-job.controller
 import { CreateJobHandler } from "./features/create-job/create-job.handler.js";
 import { GetJobsController } from "./features/get-jobs/get-jobs.controller.js";
 import { GetJobsHandler } from "./features/get-jobs/get-jobs.handler.js";
+import { GetJobController } from "./features/get-job/get-job.controller.js";
+import { GetJobHandler } from "./features/get-job/get-job.handler.js";
 import { Tag } from "../tags/entities/tag.entity.js";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Job, Tag]), UsersModule],
-  controllers: [CreateJobController, GetJobsController],
-  providers: [CreateJobHandler, GetJobsHandler],
-  exports: [TypeOrmModule],
+	imports: [TypeOrmModule.forFeature([Job, Tag]), UsersModule],
+	controllers: [CreateJobController, GetJobsController, GetJobController],
+	providers: [CreateJobHandler, GetJobsHandler, GetJobHandler],
+	exports: [TypeOrmModule],
 })
 export class JobsModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(
-      { path: "jobs", method: RequestMethod.POST },
-      { path: "jobs", method: RequestMethod.GET }
-    );
+		consumer
+			.apply(AuthMiddleware)
+			.forRoutes(
+				{ path: "jobs", method: RequestMethod.POST },
+				{ path: "jobs", method: RequestMethod.GET },
+				{ path: "jobs/:id", method: RequestMethod.GET },
+			);
 	}
 }
