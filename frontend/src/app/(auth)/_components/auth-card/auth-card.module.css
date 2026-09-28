@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 34px 30px;
+  backdrop-filter: blur(18px);
+}
+
+.heading {
+  text-align: center;
+}

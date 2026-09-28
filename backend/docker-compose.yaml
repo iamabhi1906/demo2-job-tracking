@@ -1,0 +1,56 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-job-tracker
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - job-tracker-postgres-data:/var/lib/postgresql/data
+      - ./init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql:ro
+    networks:
+      - job-tracker-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-job-tracker
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8890:80"
+    depends_on:
+      - postgres
+    volumes:
+      - job-tracker-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - job-tracker-network
+
+  backend:
+    build:
+      context: .
+      target: dev
+    container_name: backend-job-tracker
+    depends_on:
+      - postgres
+    init: true
+    ports:
+      - "5050:3000"
+    volumes:
+      - .:/app
+      - api_node_modules:/app/node_modules
+    env_file:
+      - .env
+    command: pnpm start:dev
+    networks:
+      - job-tracker-network
+
+volumes:
+  api_node_modules:
+  job-tracker-postgres-data:
+  job-tracker-pgadmin-data:
+
+networks:
+  job-tracker-network:
+    external: true

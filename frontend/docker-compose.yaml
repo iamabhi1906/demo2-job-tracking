@@ -1,0 +1,25 @@
+services:
+
+  web:
+    build:
+      context: .
+      target: dev
+    container_name: frontend-job-tracker
+    init: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - frontend_node_modules:/app/node_modules
+    env_file:
+      - .env
+    command: pnpm run dev
+    networks:
+      - job-tracker-network
+
+volumes:
+  frontend_node_modules:
+
+networks:
+  job-tracker-network:
+    external: true

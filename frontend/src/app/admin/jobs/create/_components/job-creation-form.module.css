@@ -1,0 +1,12 @@
+.card {
+  width: 100%;
+  max-width: 820px;
+}
+
+.subtitle {
+  margin-bottom: 24px;
+}
+
+.actions {
+  margin-top: 24px;
+}

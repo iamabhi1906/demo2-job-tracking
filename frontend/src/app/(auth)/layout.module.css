@@ -1,0 +1,11 @@
+.main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 48px 16px;
+  overflow: hidden;
+  background-size: 46px 46px;
+}
