@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import JobCreationForm from "./_components/job-creation-form";
+import JobCreationForm from "./_components/job-creation-form/job-creation-form";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { ArrowBack } from "@mui/icons-material";

@@ -1,12 +1,6 @@
 import type { JobCreationSchemaOutput } from "@/app/admin/jobs/create/_schema/job-creation.schema";
-import { api } from "@/lib/http";
+import { api, type BackendErrorBody } from "@/lib/http";
 import axios from "axios";
-
-interface BackendErrorBody {
-  message?: string | string[];
-  statusCode?: number;
-  error?: string;
-}
 
 export default async function createJob(values: JobCreationSchemaOutput) {
   try {

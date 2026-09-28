@@ -10,3 +10,9 @@ export const api = axios.create({
   baseURL: NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
+
+export interface BackendErrorBody {
+  message?: string | string[];
+  statusCode?: number;
+  error?: string;
+}

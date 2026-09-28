@@ -14,12 +14,21 @@ export interface TagSelectProps {
   value: string[];
   onChange: (names: string[]) => void;
   error?: string;
+  /** Applicants filtering a job list may pick tags but must not create them. */
+  allowCreate?: boolean;
+  label?: string;
 }
 
 const normalize = (name: string) => name.trim().toLocaleLowerCase();
 const CREATE_OPTION_ID = "__create__";
 
-export function TagSelect({ value, onChange, error }: TagSelectProps) {
+export function TagSelect({
+  value,
+  onChange,
+  error,
+  allowCreate = true,
+  label = "Tags",
+}: TagSelectProps) {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -51,6 +60,7 @@ export function TagSelect({ value, onChange, error }: TagSelectProps) {
   );
 
   const canCreate =
+    allowCreate &&
     trimmedInput.length > 0 &&
     !matchesExisting &&
     !selectedNames.has(normalize(trimmedInput)) &&
@@ -109,7 +119,11 @@ export function TagSelect({ value, onChange, error }: TagSelectProps) {
   const helper =
     error ??
     optionsError ??
-    (atLimit ? "Up to 10 tags selected." : "Pick a tag or type a new one.");
+    (atLimit
+      ? "Up to 10 tags selected."
+      : allowCreate
+        ? "Pick a tag or type a new one."
+        : "Pick a tag to filter by.");
 
   return (
     <div className={styles.wrapper}>
@@ -146,8 +160,10 @@ export function TagSelect({ value, onChange, error }: TagSelectProps) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Tags"
-            placeholder="Search or add tags..."
+            label={label}
+            placeholder={
+              allowCreate ? "Search or add tags..." : "Search tags..."
+            }
             error={Boolean(error)}
             helperText={helper}
             variant="outlined"

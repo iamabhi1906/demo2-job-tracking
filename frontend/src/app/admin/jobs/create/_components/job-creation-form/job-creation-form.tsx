@@ -12,14 +12,14 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
-import createJob from "../../../../../services/jobs/create-job";
+import createJob from "../../../../../../services/jobs/create-job";
 import {
   jobCreationSchema,
   jobCreationSchemaDefaultValues,
   type JobCreationSchemaInput,
   type JobCreationSchemaOutput,
-} from "../_schema/job-creation.schema";
-import { JobField } from "./job-field";
+} from "../../_schema/job-creation.schema";
+import { JobField } from "../job-fields/job-field";
 import { TagSelect } from "@/components/tags/tag-select/tag-select";
 import styles from "./job-creation-form.module.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
