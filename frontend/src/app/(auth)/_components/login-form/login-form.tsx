@@ -46,7 +46,9 @@ export function LoginForm() {
       enqueueSnackbar(`Welcome back, ${sessionUser.name}`, {
         variant: "success",
       });
-      router.replace("/");
+      router.replace(
+        sessionUser.role === "applicant" ? "/applicant" : "/admin",
+      );
       router.refresh();
     } catch (error) {
       if (error instanceof SessionError && error.status === 403) {

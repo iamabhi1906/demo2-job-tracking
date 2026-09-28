@@ -16,8 +16,11 @@ export class AuthController {
 	@Post("session")
 	async createSession(@Body() body: CreateSessionDto, @Res({ passthrough: true }) response: Response) {
 		const result = await this.authService.createSession(body.idToken);
-		if (!result.emailVerified || !result.sessionCookie) {
-			throw new ForbiddenException("Email not verified");
+		// if (!result.emailVerified || !result.sessionCookie) {
+		// 	throw new ForbiddenException("Email not verified");
+  //   }
+    if (!result.sessionCookie) {
+			throw new ForbiddenException("Invalid credentials");
 		}
 		const secure = this.configService.get("NODE_ENV") === "production";
 		response.cookie(SESSION_COOKIE_NAME, result.sessionCookie, sessionCookieOptions(secure, result.ttlMs));

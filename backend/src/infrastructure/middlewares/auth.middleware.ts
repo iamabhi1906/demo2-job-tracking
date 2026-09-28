@@ -19,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
 
 		try {
 			const decoded = await this.firebaseService.verifySessionCookie(sessionCookie, true);
-			if (!decoded.email_verified) throw new ForbiddenException("Email not verified");
+			// if (!decoded.email_verified) throw new ForbiddenException("Email not verified");
 
 			const user = await this.usersService.findUserByFirebaseUid(decoded.uid);
 

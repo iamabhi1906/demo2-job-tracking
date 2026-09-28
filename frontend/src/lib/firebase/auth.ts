@@ -5,7 +5,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
+  // signOut,
   updateProfile,
 } from "firebase/auth";
 
@@ -33,11 +33,11 @@ export async function loginWithEmail(email: string, password: string) {
     password,
   );
   const user = credential.user;
-  if (!user.emailVerified) {
-    await signOut(firebaseAuth);
-    await sendEmailVerification(user);
-    throw new Error("EMAIL_NOT_VERIFIED");
-  }
+  // if (!user.emailVerified) {
+  //   await signOut(firebaseAuth);
+  //   await sendEmailVerification(user);
+  //   throw new Error("EMAIL_NOT_VERIFIED");
+  // }
   return user;
 }
 

@@ -1,18 +1,36 @@
-import { CurrentUser } from "@/components/current-user";
 import { SignOutButton } from "@/components/sign-out-button";
-import { firebaseAuth } from "@/lib/firebase/client";
-import { Box, Typography } from "@mui/material";
+import { getSessionUser } from "@/lib/auth/session";
+import { UserRole } from "@/lib/auth/session-user.type";
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getSessionUser();
+
   return (
     <Box>
+      <AppBar position="static" color="secondary">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1, color: "#fff" }}>
+            Job Tracking
+          </Typography>
+          <SignOutButton />
+        </Toolbar>
+      </AppBar>
+
       <Typography variant="h1" color="primary">
-        This is just a tesing Page
-        {firebaseAuth.app.name}
+        Welcome {user?.name} to Job Trackering
       </Typography>
 
-      <CurrentUser />
-      <SignOutButton />
+      {user?.role === UserRole.ADMIN ? (
+        <Button variant="contained">
+          <Link href="/admin">Admin</Link>
+        </Button>
+      ) : (
+        <Button variant="contained">
+          <Link href="/applicant">View jobs</Link>
+        </Button>
+      )}
     </Box>
   );
 }

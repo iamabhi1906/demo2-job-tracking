@@ -19,12 +19,11 @@ export class AuthService {
 
 	async createSession(idToken: string) {
     try {
-      console.log("createSession", idToken)
 			const decoded = await this.firebaseService.verifyIdToken(idToken);
 
-			if (!decoded.email_verified) {
-				return { emailVerified: false };
-			}
+			// if (!decoded.email_verified) {
+			// 	return { emailVerified: false };
+			// }
 
 			const sessionCookie = await this.firebaseService.createSessionCookie(idToken, this.sessionCookieTtlMs);
 
