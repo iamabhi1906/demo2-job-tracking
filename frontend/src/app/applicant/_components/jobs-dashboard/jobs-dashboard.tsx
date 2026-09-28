@@ -30,7 +30,7 @@ const initialState: JobsState = {
   error: null,
 };
 
-export function JobsDashboard() {
+export function JobsDashboard({ isAdmin = false }: { isAdmin?: boolean }) {
   const { page, sort, update, dto } = useJobSearch();
   const [state, setState] = useState(initialState);
 
@@ -119,7 +119,9 @@ export function JobsDashboard() {
                 No jobs match these filters. Try clearing some of them.
               </Alert>
             ) : (
-              jobs.map((job) => <JobCard key={job.id} job={job} />)
+              jobs.map((job) => (
+                <JobCard key={job.id} job={job} isAdmin={isAdmin} />
+              ))
             )}
 
             {!loading && totalPages > 1 && (

@@ -5,7 +5,6 @@ export type { GetJobsDto, Job, GetJobsResponse } from "./job.schema";
 
 export default async function getJobs(dto: GetJobsDto = {}) {
   try {
-    // Drop empty values: `?department=` would fail the backend's `.min(1)`.
     const params = Object.fromEntries(
       Object.entries(dto).filter(
         ([, value]) =>

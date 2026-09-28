@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,6 +13,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { StatusChip } from "@/components/applications/status-chip";
 import applyToJob from "@/services/applicants/apply-job";
 import getMyApplications from "@/services/applicants/get-my-applications";
 import getJob from "@/services/jobs/get-job";
@@ -45,16 +47,13 @@ export function JobDetail({ jobId }: JobDetailProps) {
 
   useEffect(() => {
     let cancelled = false;
-
-    // Both are needed to decide the button: the job to show, and whether this
-    // applicant has already applied to it.
-    Promise.all([getJob(jobId), getMyApplications()])
-      .then(([job, applications]) => {
+    Promise.all([getJob(jobId), getMyApplications({ jobId, limit: 1 })])
+      .then(([job, response]) => {
         if (cancelled) return;
         setState({
           loading: false,
           job,
-          applied: applications.find((entry) => entry.job.id === jobId) ?? null,
+          applied: response.applications[0] ?? null,
           error: null,
         });
       })
@@ -85,8 +84,6 @@ export function JobDetail({ jobId }: JobDetailProps) {
       router.push("/applicant");
       router.refresh();
     } catch (error) {
-      // A closed job, a passed deadline and a repeat application are all server
-      // decisions, so the message shown here is the server's own.
       enqueueSnackbar(
         error instanceof Error ? error.message : "Failed to apply.",
         { variant: "error" },
@@ -168,8 +165,19 @@ export function JobDetail({ jobId }: JobDetailProps) {
       <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
         {applied ? (
           <Alert severity="success" sx={{ width: "100%" }}>
-            You applied on {formatDate(applied.appliedAt)}. Status:{" "}
-            {applied.status.replace(/_/g, " ")}.
+            You applied on {formatDate(applied.appliedAt)}.{" "}
+            <Box
+              component="span"
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                ml: 0.5,
+              }}
+            >
+              Status:
+              <StatusChip status={applied.status} />
+            </Box>
           </Alert>
         ) : (
           <Button

@@ -9,7 +9,6 @@ import { GetTagsController } from "./features/get-tags/get-tags.controller.js";
 import { GetTagsHandler } from "./features/get-tags/get-tags.handler.js";
 
 @Module({
-	// UsersModule is required because AuthMiddleware resolves UsersService to read the role.
 	imports: [TypeOrmModule.forFeature([Tag]), UsersModule],
 	controllers: [CreateTagsController, GetTagsController],
 	providers: [CreateTagsHandler, GetTagsHandler],

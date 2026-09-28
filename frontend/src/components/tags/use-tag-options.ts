@@ -15,10 +15,6 @@ export interface UseTagOptionsResult {
   options: Tag[];
   loading: boolean;
   error: string | null;
-  /**
-   * Insert a tag created during this session so it is visible straight away,
-   * without waiting for the next fetch.
-   */
   addTag: (tag: Tag) => void;
 }
 
@@ -29,7 +25,6 @@ const mergeTag = (tags: Tag[], tag: Tag): Tag[] =>
     ? tags
     : [tag, ...tags];
 
-/** Mirrors the backend `LIKE %q%` filter applied to locally created tags. */
 const matchQuery = (tag: Tag, query: string) => {
   const needle = query.trim().toLocaleLowerCase();
   return needle.length === 0 || normalize(tag.name).includes(needle);

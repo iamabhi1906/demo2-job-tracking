@@ -1,15 +1,32 @@
 import { api, toErrorMessage } from "@/lib/http";
 import {
+  type ApplicationStatus,
   myApplicationsResponseSchema,
-  type Application,
+  type MyApplicationsResponse,
 } from "./applicant.schema";
 
-export type { Application };
+export interface MyApplicationsParams {
+  status?: ApplicationStatus;
+  jobId?: string;
+  page?: number;
+  limit?: number;
+}
 
-export default async function getMyApplications(): Promise<Application[]> {
+export type { MyApplicationsResponse };
+
+export default async function getMyApplications(
+  params: MyApplicationsParams = {},
+): Promise<MyApplicationsResponse> {
   try {
-    const response = await api.get("/applicant/applications");
-    return myApplicationsResponseSchema.parse(response.data).applications;
+    const query = Object.fromEntries(
+      Object.entries(params).filter(
+        ([, value]) => value !== undefined && value !== "",
+      ),
+    );
+    const response = await api.get("/applicant/applications", {
+      params: query,
+    });
+    return myApplicationsResponseSchema.parse(response.data);
   } catch (error) {
     throw toErrorMessage(error, "Failed to load your applications.");
   }

@@ -22,13 +22,13 @@ import {
 
 interface JobCardProps {
   job: Job;
+  isAdmin: boolean;
 }
 
-export function JobCard({ job }: JobCardProps) {
+export function JobCard({ job, isAdmin = false }: JobCardProps) {
   const expired = isDeadlinePassed(job.applicationDeadline);
   const closed = job.status === "closed";
 
-  // Rows without a value are dropped, so a missing field needs no branching.
   const meta = [
     {
       icon: <ApartmentOutlinedIcon fontSize="small" />,
@@ -115,9 +115,9 @@ export function JobCard({ job }: JobCardProps) {
           disabled={closed || expired}
           fullWidth
           component={Link}
-          href={`/applicant/jobs/${job.id}`}
+          href={isAdmin ? `/admin/jobs/${job.id}` : `/applicant/jobs/${job.id}`}
         >
-          View &amp; apply
+          {isAdmin ? "View" : "View & apply"}
         </Button>
       </CardActions>
     </Card>

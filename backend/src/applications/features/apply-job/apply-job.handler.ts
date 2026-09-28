@@ -15,8 +15,6 @@ export class ApplyJobHandler {
 	constructor(
 		@InjectRepository(Application)
 		private readonly applicationRepository: Repository<Application>,
-		@InjectRepository(ApplicationStatusHistory)
-		private readonly historyRepository: Repository<ApplicationStatusHistory>,
 		@InjectRepository(Job)
 		private readonly jobRepository: Repository<Job>,
 		private readonly applicantsService: ApplicantsService,
@@ -31,7 +29,7 @@ export class ApplyJobHandler {
 		}
 		if (new Date() > job.applicationDeadline) {
 			throw new ConflictException("The application deadline for this job has passed");
-    }
+		}
 
 		const profile = await this.applicantsService.getOrCreateByFirebaseUid(user.uid);
 
@@ -39,28 +37,25 @@ export class ApplyJobHandler {
 			where: { applicantId: profile.id, jobId },
 		});
 		if (existing) throw new ConflictException("You have already applied to this job");
-
-		const application = this.applicationRepository.create({
-			applicantId: profile.id,
-			jobId,
-			status: ApplicationStatus.APPLIED,
-		});
-
-		try {
-			const saved = await this.applicationRepository.save(application);
-			await this.historyRepository.save(
-				this.historyRepository.create({
-					applicationId: saved.id,
-					previousStatus: null,
-					newStatus: ApplicationStatus.APPLIED,
-					actorUserId: profile.userId,
-					actorRole: ActorRole.APPLICANT,
-					note: null,
+		return this.applicationRepository.manager.transaction(async (manager) => {
+			const saved = await manager.getRepository(Application).save(
+				this.applicationRepository.create({
+					applicantId: profile.id,
+					jobId,
+					status: ApplicationStatus.APPLIED,
 				}),
 			);
+
+			await manager.getRepository(ApplicationStatusHistory).save({
+				applicationId: saved.id,
+				previousStatus: null,
+				newStatus: ApplicationStatus.APPLIED,
+				actorUserId: profile.userId,
+				actorRole: ActorRole.APPLICANT,
+				note: null,
+			});
+
 			return saved;
-		} catch (error) {
-			throw error;
-		}
+		});
 	}
 }

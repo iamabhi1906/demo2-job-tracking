@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { UserRole } from "@/lib/auth/session-user.type";
+import { AdminNav } from "./_components/admin-nav";
 
 export const metadata: Metadata = {
-  title: "Applicant Dashboard",
+  title: "Admin",
 };
 
-export default async function ApplicantTemplate({
+export default async function AdminTemplate({
   children,
 }: {
   children: React.ReactNode;
@@ -20,5 +21,10 @@ export default async function ApplicantTemplate({
     );
   }
 
-  return <main>{children}</main>;
+  return (
+    <>
+      <AdminNav />
+      <main>{children}</main>
+    </>
+  );
 }

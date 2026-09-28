@@ -38,8 +38,6 @@ const STATUSES = [
   { value: "open", label: "Open" },
   { value: "closed", label: "Closed" },
 ] as const;
-
-/** Accepts the shapes the form may hold and hands the picker a Dayjs or null. */
 function toDayjs(value: unknown) {
   if (value === null || value === undefined || value === "") return null;
   if (dayjs.isDayjs(value)) return value as dayjs.Dayjs;
@@ -175,8 +173,6 @@ export default function JobCreationForm() {
                       label="Application deadline"
                       format="YYYY-MM-DD HH:mm"
                       value={toDayjs(field.value)}
-                      // Store an ISO string: the picker hands back a Dayjs
-                      // instance, which the value guard cannot read back.
                       onChange={(value) =>
                         field.onChange(value ? value.toISOString() : null)
                       }

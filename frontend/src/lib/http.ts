@@ -4,6 +4,7 @@ import { API_URL, NEXT_PUBLIC_API_URL } from "@/lib/config";
 
 export const ssrApi = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
 });
 
 export const api = axios.create({
@@ -17,7 +18,6 @@ export interface BackendErrorBody {
   error?: string;
 }
 
-/** Turns any axios failure into the backend's own message where there is one. */
 export function toErrorMessage(error: unknown, fallback: string): Error {
   if (axios.isAxiosError<BackendErrorBody>(error)) {
     const body = error.response?.data;

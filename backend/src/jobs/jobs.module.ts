@@ -10,11 +10,13 @@ import { GetJobsHandler } from "./features/get-jobs/get-jobs.handler.js";
 import { GetJobController } from "./features/get-job/get-job.controller.js";
 import { GetJobHandler } from "./features/get-job/get-job.handler.js";
 import { Tag } from "../tags/entities/tag.entity.js";
+import { CloseJobHandler } from "./features/close-job/close-job.handler.js";
+import { CloseJobController } from "./features/close-job/close-job.controler.js";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Job, Tag]), UsersModule],
-	controllers: [CreateJobController, GetJobsController, GetJobController],
-	providers: [CreateJobHandler, GetJobsHandler, GetJobHandler],
+	controllers: [CreateJobController, GetJobsController, GetJobController, CloseJobController],
+	providers: [CreateJobHandler, GetJobsHandler, GetJobHandler, CloseJobHandler],
 	exports: [TypeOrmModule],
 })
 export class JobsModule implements NestModule {
@@ -24,7 +26,8 @@ export class JobsModule implements NestModule {
 			.forRoutes(
 				{ path: "jobs", method: RequestMethod.POST },
 				{ path: "jobs", method: RequestMethod.GET },
-				{ path: "jobs/:id", method: RequestMethod.GET },
+        { path: "jobs/:id", method: RequestMethod.GET },
+				{ path: "jobs/:id/close", method: RequestMethod.PATCH }
 			);
 	}
 }

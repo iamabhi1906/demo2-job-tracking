@@ -8,6 +8,7 @@ import { SignOutButton } from "@/components/sign-out-button";
 
 const LINKS = [
   { href: "/applicant", label: "Browse jobs" },
+  { href: "/applicant/applications", label: "My applications" },
   { href: "/applicant/profile", label: "My profile" },
 ] as const;
 
@@ -32,7 +33,6 @@ export function ApplicantNav() {
           key={link.href}
           component={Link}
           href={link.href}
-          // The job list lives at /applicant, so only an exact hit means "current".
           variant={pathname === link.href ? "contained" : "text"}
           size="small"
         >

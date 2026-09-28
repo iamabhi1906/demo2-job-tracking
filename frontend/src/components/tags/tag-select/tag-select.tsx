@@ -14,7 +14,6 @@ export interface TagSelectProps {
   value: string[];
   onChange: (names: string[]) => void;
   error?: string;
-  /** Applicants filtering a job list may pick tags but must not create them. */
   allowCreate?: boolean;
   label?: string;
 }
@@ -66,7 +65,6 @@ export function TagSelect({
     !selectedNames.has(normalize(trimmedInput)) &&
     !atLimit;
 
-  /** Creates the tag and returns its stored name, or null if it failed. */
   const createTagByName = async (name: string): Promise<string | null> => {
     setIsCreating(true);
     try {
@@ -86,11 +84,6 @@ export function TagSelect({
     }
   };
 
-  /**
-   * The create row lives inside the listbox rather than below the input: the
-   * popper is portaled above the page, so any button underneath it is
-   * unclickable. It also makes Enter work for free via the listbox.
-   */
   const listOptions = useMemo<Tag[]>(() => {
     if (!canCreate) return options;
     return [{ id: CREATE_OPTION_ID, name: trimmedInput }, ...options];
@@ -106,8 +99,6 @@ export function TagSelect({
       return;
     }
 
-    // Build the result from `picked` so a tag selected while the request is in
-    // flight is not lost to a stale `value` closure.
     const createdName = await createTagByName(requested.name);
     onChange(createdName === null ? names : [...names, createdName]);
   };

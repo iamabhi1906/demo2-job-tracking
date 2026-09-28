@@ -4,7 +4,6 @@ import {
   type ApplicantProfile,
 } from "./applicant.schema";
 
-/** Called with the Cloudinary `secure_url` once the upload widget finishes. */
 export async function updateResume(
   resumeUrl: string,
 ): Promise<ApplicantProfile> {
