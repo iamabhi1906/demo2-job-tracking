@@ -1,0 +1,125 @@
+Enum user_role {
+  applicant
+  admin
+}
+
+Enum employment_type {
+  full_time
+  part_time
+  contract
+  internship
+}
+
+Enum job_status {
+  open
+  closed
+}
+
+Enum application_status {
+  applied
+  shortlisted
+  interview
+  offer
+  hired
+  rejected
+  withdrawn
+}
+
+Enum actor_role {
+  applicant
+  admin
+  system
+}
+
+Table users {
+  id uuid [pk]
+  firebase_uid varchar [unique, not null]
+  name varchar [not null]
+  email varchar [unique, not null]
+  role user_role [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table applicant_profiles {
+  id uuid [pk]
+  user_id uuid [unique, not null, ref: - users.id]
+  years_of_experience decimal
+  resume_url varchar
+  about_me text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table jobs {
+  id uuid [pk]
+  title varchar [not null]
+  department varchar
+  location varchar
+  employment_type employment_type [not null]
+  minimum_experience decimal
+  application_deadline date [not null]
+  status job_status [not null]
+  created_by uuid [not null, ref: > users.id]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table tags {
+  id uuid [pk]
+  name varchar [unique, not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table job_tags {
+  job_id uuid [not null, ref: > jobs.id]
+  tag_id uuid [not null, ref: > tags.id]
+
+  indexes {
+    (job_id, tag_id) [pk]
+  }
+}
+
+Table applicant_tags {
+  applicant_id uuid [not null, ref: > applicant_profiles.id]
+  tag_id uuid [not null, ref: > tags.id]
+
+  indexes {
+    (applicant_id, tag_id) [pk]
+  }
+}
+
+Table applications {
+  id uuid [pk]
+  applicant_id uuid [not null, ref: > applicant_profiles.id]
+  job_id uuid [not null, ref: > jobs.id]
+  status application_status [not null]
+  applied_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  indexes {
+    (applicant_id, job_id) [unique]
+    applicant_id
+    job_id
+    status
+    applied_at
+  }
+}
+
+Table application_status_history {
+  id uuid [pk]
+  application_id uuid [not null, ref: > applications.id]
+  previous_status application_status
+  new_status application_status [not null]
+  actor_user_id uuid [ref: > users.id]
+  actor_role actor_role [not null]
+  note text
+  created_at timestamp [not null]
+
+  indexes {
+    application_id
+    created_at
+    new_status
+  }
+}

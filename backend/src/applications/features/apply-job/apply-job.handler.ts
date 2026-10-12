@@ -35,8 +35,10 @@ export class ApplyJobHandler {
 
 		const existing = await this.applicationRepository.findOne({
 			where: { applicantId: profile.id, jobId },
-		});
-		if (existing) throw new ConflictException("You have already applied to this job");
+    });
+		
+    if (existing) throw new ConflictException("You have already applied to this job");
+		
 		return this.applicationRepository.manager.transaction(async (manager) => {
 			const saved = await manager.getRepository(Application).save(
 				this.applicationRepository.create({
